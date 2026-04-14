@@ -1,0 +1,868 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yaqi Li · Zoom · Product & Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dk:#00031F;--dk2:#040720;--dk3:#080c28;--dk4:#0d1235;--dk5:#121840;--dk6:#1a2150;
+  --db:rgba(45,140,255,0.08);--db2:rgba(45,140,255,0.14);--db3:rgba(45,140,255,0.26);
+  --dt1:#e8f0ff;--dt2:rgba(232,240,255,0.70);--dt3:rgba(232,240,255,0.40);--dt4:rgba(232,240,255,0.18);
+  --accent:#0B5CFF;--accent2:#2D8CFF;--accent3:#6096FC;--teal:#00EDE7;
+  --accent-bg:rgba(11,92,255,0.08);--accent-bg2:rgba(11,92,255,0.14);
+  --lk:#f0f4ff;--lk2:#e6ecff;--lb:rgba(11,92,255,0.10);
+  --lt1:#040c2a;--lt2:rgba(4,12,42,0.68);--lt3:rgba(4,12,42,0.42);--lt4:rgba(4,12,42,0.16);
+  --r:8px;--r2:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--dk);color:var(--dt1);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* Progress */
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--teal));width:0%;z-index:1001;transition:width .08s}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 64px;background:rgba(0,3,31,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--db)}
+.nav-logo{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent2);letter-spacing:.12em}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dt3);letter-spacing:.1em;text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--accent2)}
+
+/* Sections */
+.sec-dk{padding:88px 72px;background:var(--dk);border-top:1px solid var(--db)}
+.sec-dk2{padding:88px 72px;background:var(--dk2);border-top:1px solid var(--db)}
+.sec-dk3{padding:88px 72px;background:var(--dk3);border-top:1px solid var(--db)}
+.sec-lt{padding:88px 72px;background:var(--lk);border-top:1px solid var(--lb);color:var(--lt1)}
+.max{max-width:1100px;margin:0 auto}
+
+/* Labels */
+.lbl-dk{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent2);letter-spacing:.24em;text-transform:uppercase;margin-bottom:52px;display:flex;align-items:center;gap:12px;font-weight:500}
+.lbl-dk::after{content:'';flex:0 0 36px;height:1px;background:linear-gradient(90deg,var(--accent2),transparent)}
+.lbl-lt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.24em;text-transform:uppercase;margin-bottom:52px;display:flex;align-items:center;gap:12px;font-weight:500}
+.lbl-lt::after{content:'';flex:0 0 36px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+
+/* Animations */
+.r{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.r.vis{opacity:1;transform:none}
+.r2{opacity:0;transform:translateY(16px);transition:opacity .6s ease .12s,transform .6s ease .12s}
+.r2.vis{opacity:1;transform:none}
+.r3{opacity:0;transform:translateY(16px);transition:opacity .6s ease .24s,transform .6s ease .24s}
+.r3.vis{opacity:1;transform:none}
+
+/* Titles */
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;line-height:1.1;color:var(--dt1);margin-bottom:16px;letter-spacing:-.02em}
+.sec-title-lt{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;line-height:1.1;color:var(--lt1);margin-bottom:16px;letter-spacing:-.02em}
+.sec-sub{font-size:14px;color:var(--dt3);max-width:560px;margin-bottom:48px;line-height:1.6}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+
+/* ===== HERO ===== */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;padding:120px 72px 88px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 20%,rgba(11,92,255,.05) 0%,transparent 65%),radial-gradient(ellipse 50% 60% at 10% 85%,rgba(0,237,231,.04) 0%,transparent 55%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--db) 1px,transparent 1px),linear-gradient(90deg,var(--db) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 85% 75% at 50% 50%,black 10%,transparent 100%)}
+.hero-scan{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(45,140,255,.5),transparent);animation:scan 6s ease-in-out infinite;opacity:.35}
+@keyframes scan{0%{top:0}100%{top:100%}}
+.hero-content{position:relative;z-index:1;max-width:1100px}
+.hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent2);letter-spacing:.28em;text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:14px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent2)}
+.hero-name{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5.5vw,5rem);font-weight:800;line-height:1.02;letter-spacing:-.02em;margin-bottom:12px;color:var(--dt1)}
+.hero-name span{background:linear-gradient(135deg,var(--accent2),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-role{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2vw,1.45rem);font-weight:600;color:var(--dt2);margin-bottom:32px;letter-spacing:-.01em}
+.hero-quote{font-family:'Noto Serif SC',serif;font-size:clamp(.95rem,1.5vw,1.15rem);color:var(--dt2);line-height:1.8;max-width:660px;padding-left:20px;border-left:2px solid var(--accent);margin-bottom:52px}
+.hero-metrics{display:flex;gap:48px;flex-wrap:wrap;margin-bottom:44px}
+.metric-num{font-family:'Syne',sans-serif;font-size:2.8em;font-weight:700;color:var(--accent2);line-height:1}
+.metric-unit{font-size:.38em;color:var(--accent3);margin-left:2px}
+.metric-lbl{font-size:13px;color:var(--dt2);margin-top:4px;line-height:1.4}
+.metric-sub{display:block;font-size:11px;color:var(--dt4);margin-top:2px;font-family:'IBM Plex Mono',monospace}
+.hero-tags{display:flex;gap:9px;flex-wrap:wrap}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent3);letter-spacing:.08em;padding:6px 14px;border:1px solid var(--db2);border-radius:100px;background:var(--accent-bg)}
+
+/* ===== ROLE SCOPE (new compact section) ===== */
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.role-card{background:var(--dk4);border:1px solid var(--db2);border-radius:var(--r2);padding:24px 26px;position:relative;overflow:hidden}
+.role-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.role-card.rc1::before{background:linear-gradient(90deg,var(--accent2),transparent)}
+.role-card.rc2::before{background:linear-gradient(90deg,var(--teal),transparent)}
+.role-card.rc3::before{background:linear-gradient(90deg,var(--accent3),transparent)}
+.role-card-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.rc1 .role-card-label{color:var(--accent2)}
+.rc2 .role-card-label{color:var(--teal)}
+.rc3 .role-card-label{color:var(--accent3)}
+.role-card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--dt1);margin-bottom:8px;line-height:1.3}
+.role-card-body{font-size:12.5px;color:var(--dt2);line-height:1.6}
+.role-tag{display:inline-block;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 10px;border-radius:4px}
+.rc1 .role-tag{color:var(--accent2);background:rgba(45,140,255,.08);border:1px solid rgba(45,140,255,.2)}
+.rc2 .role-tag{color:var(--teal);background:rgba(0,237,231,.07);border:1px solid rgba(0,237,231,.18)}
+.rc3 .role-tag{color:var(--accent3);background:rgba(96,150,252,.08);border:1px solid rgba(96,150,252,.18)}
+
+/* ===== INSIGHTS ===== */
+.insight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.insight-card{background:var(--dk4);border:1px solid var(--db2);border-radius:var(--r2);padding:28px;position:relative;overflow:hidden}
+.insight-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.insight-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);letter-spacing:.2em;margin-bottom:12px}
+.insight-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--dt1);margin-bottom:10px;line-height:1.3}
+.insight-body{font-size:13px;color:var(--dt2);line-height:1.7}
+.insight-chip{display:inline-block;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:.06em;padding:4px 10px;background:rgba(0,237,231,.07);border:1px solid rgba(0,237,231,.16);border-radius:4px}
+
+/* ===== PROPOSALS ===== */
+.proposal-num{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.p1 .proposal-num{color:var(--accent3)}
+.p2 .proposal-num{color:var(--teal)}
+.p3 .proposal-num{color:var(--accent3)}
+.p4 .proposal-num{color:#a78bfa}
+.proposal-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--dt1);margin-bottom:10px;line-height:1.3}
+.proposal-insight{font-size:11.5px;color:var(--dt4);font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--db)}
+.proposal-body{font-size:13px;color:var(--dt2);line-height:1.7}
+.proposal-metric{margin-top:14px;padding:10px 14px;border-radius:6px;font-size:11.5px;color:var(--dt3)}
+.p1 .proposal-metric{background:rgba(11,92,255,.07);border:1px solid rgba(11,92,255,.14)}
+.p2 .proposal-metric{background:rgba(0,237,231,.06);border:1px solid rgba(0,237,231,.13)}
+.p3 .proposal-metric{background:rgba(96,150,252,.07);border:1px solid rgba(96,150,252,.14)}
+.p4 .proposal-metric{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.14)}
+.proposal-metric span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+.p1 .proposal-metric span{color:var(--accent3)}
+.p2 .proposal-metric span{color:var(--teal)}
+.p3 .proposal-metric span{color:var(--accent3)}
+.p4 .proposal-metric span{color:#a78bfa}
+
+/* ===== FIT TABLE ===== */
+.fit-table{width:100%;border-collapse:separate;border-spacing:0 2px}
+.fit-table th{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dt4);letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;background:var(--dk6);text-align:left}
+.fit-table td{padding:13px 16px;background:var(--dk3);font-size:13px;color:var(--dt2);vertical-align:middle}
+.fit-table tr:hover td{background:var(--dk4)}
+.fit-table td:first-child{font-weight:500;color:var(--dt1)}
+.pip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 9px;border-radius:5px;white-space:nowrap}
+.pip-s{background:rgba(11,92,255,.13);color:var(--accent3);border:1px solid rgba(11,92,255,.28)}
+.pip-m{background:rgba(0,237,231,.09);color:var(--teal);border:1px solid rgba(0,237,231,.22)}
+.pip-b{background:rgba(245,158,11,.09);color:#fbbf24;border:1px solid rgba(245,158,11,.22)}
+
+/* ===== PROOF ===== */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.proof-card{background:var(--dk4);border:1px solid var(--db2);border-radius:var(--r2);padding:26px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.proof-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--teal))}
+.proof-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.proof-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--dt1);margin-bottom:8px;line-height:1.3}
+.proof-body{font-size:12.5px;color:var(--dt2);line-height:1.7;flex:1}
+
+/* ===== EXP ===== */
+.exp-grid{display:grid;gap:16px}
+.exp-card{background:var(--dk4);border:1px solid var(--db2);border-radius:var(--r2);padding:26px 28px;display:grid;grid-template-columns:1fr auto;gap:20px;position:relative;overflow:hidden}
+.exp-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),transparent)}
+.exp-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dt4);letter-spacing:.08em;margin-bottom:8px}
+.exp-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--dt1);margin-bottom:5px}
+.exp-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);letter-spacing:.06em;margin-bottom:12px}
+.exp-body{font-size:13px;color:var(--dt2);line-height:1.7}
+.exp-nums{display:flex;flex-direction:column;gap:10px;text-align:right;min-width:110px}
+.exp-num-val{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:700;color:var(--accent2);line-height:1}
+.exp-num-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dt4);letter-spacing:.06em;margin-top:2px}
+
+/* ===== CAPABILITIES ===== */
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cap-card{background:var(--lk);border:1px solid var(--lb);border-radius:var(--r2);padding:26px;position:relative;overflow:hidden}
+.cap-num{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;color:rgba(11,92,255,.07);line-height:1;position:absolute;top:10px;right:14px}
+.cap-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+.cap-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--lt1);margin-bottom:10px;line-height:1.3;position:relative;z-index:1}
+.cap-body{font-size:13px;color:var(--lt2);line-height:1.7;position:relative;z-index:1}
+.cap-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative;z-index:1}
+.cap-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);background:rgba(11,92,255,.07);border:1px solid rgba(11,92,255,.18);padding:3px 9px;border-radius:4px}
+
+/* ===== CLOSING Q ===== */
+.closing-q{margin-top:40px;padding:28px 32px;background:var(--lk2);border:1px solid var(--lb);border-radius:var(--r2)}
+.closing-q-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+.closing-q-text{font-family:'Noto Serif SC',serif;font-size:1.05rem;color:var(--lt1);line-height:1.75}
+
+/* ===== CLOSE ===== */
+#close{padding:88px 72px;background:linear-gradient(160deg,var(--dk3) 0%,var(--dk) 100%);border-top:1px solid var(--db);position:relative;overflow:hidden}
+#close::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(11,92,255,.06) 0%,transparent 70%);pointer-events:none}
+.close-inner{max-width:1100px;margin:0 auto}
+.close-name{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;line-height:1;margin-bottom:14px;color:var(--dt1)}
+.contact-grid{display:flex;gap:16px;flex-wrap:wrap;margin-top:32px}
+.contact-item{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--dk4);border:1px solid var(--db2);border-radius:100px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dt2);text-decoration:none;letter-spacing:.04em;transition:border-color .2s,color .2s}
+.contact-item:hover{border-color:var(--accent2);color:var(--accent2)}
+.contact-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2)}
+
+/* ===== HONEST NOTE ===== */
+.honest-note{margin-top:28px;padding:22px 26px;background:rgba(11,92,255,.06);border:1px solid var(--db2);border-radius:var(--r2);font-size:13px;color:var(--dt2);line-height:1.75}
+.honest-note strong{color:var(--accent3);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:8px}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  nav{padding:14px 20px}.nav-links{display:none}
+  #hero,.sec-dk,.sec-dk2,.sec-dk3,.sec-lt,#close{padding:60px 24px}
+  .insight-grid,.proof-grid,.cap-grid,.two-col,.role-grid{grid-template-columns:1fr}
+  .exp-card{grid-template-columns:1fr}.exp-nums{flex-direction:row;text-align:left;flex-wrap:wrap;gap:16px}
+  .hero-metrics{gap:28px}.contact-grid{gap:10px}
+  .fit-table{display:block;overflow-x:auto}
+}
+
+.prop-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;
+  background:var(--dk4);border:1px solid var(--db2);border-radius:var(--r2);
+  overflow:hidden;position:relative;
+}
+.prop-left{padding:28px 28px 28px 32px;position:relative}
+.prop-left::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px}
+.p1.prop-left::before{background:linear-gradient(180deg,var(--accent),transparent)}
+.p2.prop-left::before{background:linear-gradient(180deg,var(--teal),transparent)}
+.p3.prop-left::before{background:linear-gradient(180deg,var(--accent3),transparent)}
+.p4.prop-left::before{background:linear-gradient(180deg,#a78bfa,transparent)}
+.prop-right{background:rgba(0,0,0,.15);padding:24px;border-left:1px solid var(--db)}
+@media(max-width:768px){.prop-row{grid-template-columns:1fr}.prop-right{border-left:none;border-top:1px solid var(--db)}}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Yaqi Li 李亚淇 · Zoom</div>
+  <div class="nav-links">
+    <a href="#analysis">Analysis</a>
+    <a href="#proposals">Proposals</a>
+    <a href="#fit">Fit</a>
+    <a href="#work">Work</a>
+    <a href="#value">What I Bring</a>
+    <a href="#close">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-scan"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow r">Product Manager · Product Designer · Innovation Specialist · Zoom Workplace</div>
+    <div class="hero-name r2">Yaqi Li <span>李亚淇</span></div>
+    <div class="hero-role r3">AI Product Builder · Social Anthropologist · 10+ Years Across 4 Countries</div>
+    <div class="hero-quote r" style="transition-delay:.1s">
+      My background sits at the intersection of two disciplines that rarely overlap: social anthropology and AI workflow engineering. The former trains rigorous analysis of how people actually communicate. The latter enables systematic transformation of that communication into structured outputs. Zoom Workplace operates precisely at that intersection.
+    </div>
+    <div class="hero-metrics r" style="transition-delay:.2s">
+      <div class="metric-item">
+        <div class="metric-num">6<span class="metric-unit">archetypes</span></div>
+        <div class="metric-lbl">User need profiles extracted<span class="metric-sub">from 10+ cross-cultural Focus Groups</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">30<span class="metric-unit">min</span></div>
+        <div class="metric-lbl">AI workflow rebuild of product cycle<span class="metric-sub">down from 5-7 days</span></div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-num">¥4<span class="metric-unit">M+</span></div>
+        <div class="metric-lbl">Revenue from 15 products shipped<span class="metric-sub">at Yilv Cultural Travel</span></div>
+      </div>
+    </div>
+    <div class="hero-tags r" style="transition-delay:.3s">
+      <span class="tag">AI Workflow Architecture</span>
+      <span class="tag">Ethnographic User Research</span>
+      <span class="tag">0→1 Product Delivery</span>
+      <span class="tag">Cross-Cultural GTM</span>
+      <span class="tag">Enterprise Stakeholder Empathy</span>
+      <span class="tag">LLM Orchestration</span>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE SCOPE -->
+<section class="sec-dk3">
+<div class="max">
+  <div class="lbl-dk r">00 · Areas of Interest</div>
+  <div class="sec-sub r2" style="max-width:700px;margin-bottom:32px">The following reflects my thinking across Zoom's product, design, and innovation domains. The analysis, proposals, and capability evidence below apply across all three directions.</div>
+  <div class="role-grid">
+    <div class="role-card rc1 r">
+      <div class="role-card-label">Product Management</div>
+      <div class="role-card-title">Zoom Docs · AI-Powered Collaboration</div>
+      <div class="role-card-body">Defining the meeting-to-document conversion experience. Owning AI features that transform transcripts and meeting context into actionable enterprise assets.</div>
+      <span class="role-tag">Conversation → Document Pipeline</span>
+    </div>
+    <div class="role-card rc2 r2">
+      <div class="role-card-label">Product Design</div>
+      <div class="role-card-title">Zoom Meeting · Next-Generation Interaction</div>
+      <div class="role-card-body">Designing the human-AI interaction layer within live meetings. User research, interaction principles, and the behavioral logic of real-time collaboration interfaces.</div>
+      <span class="role-tag">Human-AI Interaction Design</span>
+    </div>
+    <div class="role-card rc3 r3">
+      <div class="role-card-label">Innovation & Strategy</div>
+      <div class="role-card-title">Zoom Workplace · Innovation Tools</div>
+      <div class="role-card-body">Defining the product roadmap for next-generation collaborative tooling. AI commercialization, enterprise adoption strategy, and 0→1 feature delivery within a global platform context.</div>
+      <span class="role-tag">AI Commercialization · B2B Strategy</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- COMPANY ANALYSIS -->
+<section id="analysis" class="sec-dk2">
+<div class="max">
+  <div class="lbl-dk r">01 · Strategic Analysis</div>
+  <div class="two-col r2" style="margin-bottom:48px">
+    <div>
+      <div class="sec-title">My reading of Zoom's current position</div>
+    </div>
+    <div>
+      <p style="color:var(--dt2);font-size:14px;line-height:1.75">The following reflects my independent analysis based on publicly available information. These are the strategic contexts I consider most directly relevant to Zoom Workplace's product direction.</p>
+    </div>
+  </div>
+  <div class="insight-grid">
+    <div class="insight-card r">
+      <div class="insight-num">INSIGHT 01</div>
+      <div class="insight-title">Removing "Video" from the legal name was a strategic positioning decision, not a rebrand</div>
+      <div class="insight-body">In late 2024, Zoom Communications Inc. formally dropped "Video" from its name. The change reflects a deliberate repositioning: from single-purpose meeting software to an AI-first work platform. Zoom Docs and the broader Workplace suite carry the weight of substantiating that narrative with actual product capability.</div>
+      <span class="insight-chip">PLATFORM REPOSITIONING IN EXECUTION</span>
+    </div>
+    <div class="insight-card r2">
+      <div class="insight-num">INSIGHT 02</div>
+      <div class="insight-title">Zoom's primary competitive asset is its position inside the meeting, not its video technology</div>
+      <div class="insight-body">Zoom processes millions of meetings daily, generating a corpus of high-signal conversational data that competitors cannot replicate without the same meeting infrastructure. Most of this data currently has no downstream lifecycle. The strategic opportunity is converting that conversational corpus into structured, reusable enterprise knowledge  — a problem no other platform is better positioned to solve.</div>
+      <span class="insight-chip">STRUCTURAL DATA ADVANTAGE</span>
+    </div>
+    <div class="insight-card r3">
+      <div class="insight-num">INSIGHT 03</div>
+      <div class="insight-title">AI Companion 3.0 reveals the architecture: Zoom is building an orchestration layer, not a model</div>
+      <div class="insight-body">AI Companion 3.0 routes inference tasks across Zoom's own LLMs, OpenAI, Anthropic, Meta's Llama, and NVIDIA Nemotron based on context. The product moat is therefore depth of workflow integration and enterprise trust, not model performance. The relevant product question is not which model is best  — it is at which point in the meeting lifecycle which transformation should be triggered, and under what governance conditions.</div>
+      <span class="insight-chip">ORCHESTRATION OVER CAPABILITY</span>
+    </div>
+    <div class="insight-card r" style="transition-delay:.3s">
+      <div class="insight-num">INSIGHT 04</div>
+      <div class="insight-title">The field is shifting from AI-augmented tools toward AI-native workflows  — Zoom has a narrow window</div>
+      <div class="insight-body">The emerging competitive pressure is not from tools adding AI features to existing interfaces, but from products built AI-native from the ground up  — where context is persistent, the document is the workflow, and human input shifts from execution to review. Zoom's advantage is its position at the conversation source. The question is whether the product organization can move fast enough to define the AI-native collaboration paradigm before it is defined by others.</div>
+      <span class="insight-chip">PARADIGM TIMING RISK</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PROPOSALS -->
+<section id="proposals" class="sec-dk">
+<div class="max">
+  <div class="lbl-dk r">02 · Product Proposals</div>
+  <div class="two-col r2" style="margin-bottom:48px">
+    <div>
+      <div class="sec-title">Four directions worth exploring</div>
+    </div>
+    <div>
+      <p style="color:var(--dt2);font-size:14px;line-height:1.75">These proposals emerged from my own experience managing cross-cultural distributed teams — specifically the gap between what is discussed in meetings and what actually gets executed. They are shared as hypotheses, not prescriptions.</p>
+    </div>
+  </div>
+
+  <!-- PROPOSAL 01 -->
+  <div class="prop-row r" style="margin-bottom:20px">
+    <div class="prop-left p1">
+      <div class="proposal-num">Proposal 01 · Docs + Meeting</div>
+      <div class="proposal-title">Dynamic Task State Machine</div>
+      <div class="proposal-insight">Core friction: meeting commitments are spoken, then manually re-entered into separate project tools — producing information loss and execution latency.</div>
+      <div class="proposal-body">When AI detects a spoken commitment in a meeting, it auto-generates an actionable Smart Block in Zoom Docs — with assignee, deadline, and status pre-populated. The document becomes a live project tracker, not a static record. Two-way sync with external tools eliminates the manual handoff entirely.</div>
+      <div class="proposal-metric"><span>North Star Metric</span>Task completion rate via AI-generated Docs vs. manually created entries from the same meeting</div>
+    </div>
+    <div class="prop-right">
+      <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+        <defs>
+          <linearGradient id="g1a" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0B5CFF" stop-opacity=".7"/>
+            <stop offset="100%" stop-color="#2D8CFF" stop-opacity=".3"/>
+          </linearGradient>
+          <linearGradient id="g1b" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#0B5CFF" stop-opacity=".15"/>
+            <stop offset="100%" stop-color="#2D8CFF" stop-opacity=".06"/>
+          </linearGradient>
+          <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#2D8CFF" opacity=".6"/>
+          </marker>
+        </defs>
+        <rect x="8" y="30" width="132" height="56" rx="10" fill="url(#g1b)" stroke="#2D8CFF" stroke-opacity=".25" stroke-width="1"/>
+        <circle cx="26" cy="52" r="8" fill="#2D8CFF" fill-opacity=".3"/>
+        <text x="40" y="47" font-family="IBM Plex Mono,monospace" font-size="8.5" fill="#6096FC">"John finalizes</text>
+        <text x="40" y="58" font-family="IBM Plex Mono,monospace" font-size="8.5" fill="#6096FC">brief by Friday"</text>
+        <text x="16" y="75" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(232,240,255,.3)">MEETING TRANSCRIPT</text>
+        <rect x="140" y="62" width="54" height="26" rx="6" fill="rgba(11,92,255,.12)" stroke="#0B5CFF" stroke-opacity=".3" stroke-width="1"/>
+        <text x="167" y="72" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="#2D8CFF" text-anchor="middle">AI</text>
+        <text x="167" y="82" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(96,150,252,.7)" text-anchor="middle">DETECTING</text>
+        <line x1="130" y1="75" x2="138" y2="75" stroke="#2D8CFF" stroke-opacity=".5" stroke-width="1.5" marker-end="url(#arr1)"/>
+        <line x1="196" y1="75" x2="204" y2="75" stroke="#2D8CFF" stroke-opacity=".5" stroke-width="1.5" marker-end="url(#arr1)"/>
+        <rect x="206" y="20" width="126" height="110" rx="10" fill="url(#g1b)" stroke="#2D8CFF" stroke-opacity=".3" stroke-width="1"/>
+        <rect x="206" y="20" width="126" height="3" rx="2" fill="url(#g1a)"/>
+        <text x="218" y="38" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(96,150,252,.6)" letter-spacing=".1em">SMART BLOCK</text>
+        <text x="218" y="52" font-family="Syne,sans-serif" font-size="9" fill="#e8f0ff" font-weight="700">Finalize Brief</text>
+        <rect x="218" y="60" width="100" height="1" fill="rgba(45,140,255,.12)"/>
+        <text x="218" y="74" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(232,240,255,.4)">ASSIGNEE</text>
+        <text x="280" y="74" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="#6096FC">John</text>
+        <rect x="218" y="80" width="100" height="1" fill="rgba(45,140,255,.12)"/>
+        <text x="218" y="94" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(232,240,255,.4)">DEADLINE</text>
+        <text x="280" y="94" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="#00EDE7">Friday</text>
+        <rect x="218" y="100" width="100" height="1" fill="rgba(45,140,255,.12)"/>
+        <text x="218" y="114" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(232,240,255,.4)">STATUS</text>
+        <rect x="278" y="106" width="34" height="12" rx="3" fill="rgba(11,92,255,.2)" stroke="#0B5CFF" stroke-opacity=".4" stroke-width="1"/>
+        <text x="295" y="115" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="#6096FC" text-anchor="middle">TO DO</text>
+        <text x="218" y="138" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(0,237,231,.5)">⟳ synced to Jira / Asana</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- PROPOSAL 02 -->
+  <div class="prop-row r2" style="margin-bottom:20px">
+    <div class="prop-left p2">
+      <div class="proposal-num">Proposal 02 · Meeting Design</div>
+      <div class="proposal-title">Real-Time Creative Mirroring</div>
+      <div class="proposal-insight">Core friction: verbal description of visual concepts is imprecise. Teams lose time re-aligning on what was meant rather than evaluating what was proposed.</div>
+      <div class="proposal-body">A meeting sidebar canvas that renders AI-generated visual references in real time, triggered by semantic detection of creative intent. When a team discusses a design direction, the sidebar surfaces visual examples immediately. Human input shifts from description to selection and refinement.</div>
+      <div class="proposal-metric"><span>North Star Metric</span>Time from creative brief discussion to first visual reference — meeting-based vs. async follow-up baseline</div>
+    </div>
+    <div class="prop-right">
+      <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+        <defs>
+          <linearGradient id="g2a" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00EDE7" stop-opacity=".2"/>
+            <stop offset="100%" stop-color="#00EDE7" stop-opacity=".05"/>
+          </linearGradient>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00EDE7" opacity=".5"/>
+          </marker>
+        </defs>
+        <rect x="8" y="18" width="110" height="28" rx="8" fill="rgba(0,237,231,.08)" stroke="#00EDE7" stroke-opacity=".2" stroke-width="1"/>
+        <text x="18" y="30" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="#00EDE7">"clean minimal layout,</text>
+        <text x="18" y="40" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="#00EDE7">dark background"</text>
+        <rect x="8" y="54" width="110" height="28" rx="8" fill="rgba(0,237,231,.05)" stroke="#00EDE7" stroke-opacity=".14" stroke-width="1"/>
+        <text x="18" y="66" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(0,237,231,.6)">"something like the</text>
+        <text x="18" y="76" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(0,237,231,.6)">Apple homepage vibe"</text>
+        <rect x="8" y="100" width="110" height="22" rx="5" fill="rgba(0,237,231,.1)" stroke="#00EDE7" stroke-opacity=".3" stroke-width="1"/>
+        <text x="63" y="114" font-family="IBM Plex Mono,monospace" font-size="7" fill="#00EDE7" text-anchor="middle">INTENT DETECTED: VISUAL</text>
+        <line x1="120" y1="90" x2="148" y2="90" stroke="#00EDE7" stroke-opacity=".4" stroke-width="1.5" marker-end="url(#arr2)"/>
+        <rect x="150" y="14" width="60" height="50" rx="6" fill="rgba(0,237,231,.07)" stroke="#00EDE7" stroke-opacity=".25" stroke-width="1"/>
+        <rect x="157" y="20" width="46" height="28" rx="3" fill="rgba(0,237,231,.1)"/>
+        <line x1="157" y1="34" x2="203" y2="34" stroke="rgba(0,237,231,.2)" stroke-width="1"/>
+        <line x1="157" y1="40" x2="195" y2="40" stroke="rgba(0,237,231,.15)" stroke-width="1"/>
+        <text x="180" y="56" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(0,237,231,.5)" text-anchor="middle">Option A</text>
+        <rect x="220" y="14" width="60" height="50" rx="6" fill="rgba(0,237,231,.12)" stroke="#00EDE7" stroke-opacity=".4" stroke-width="1.5"/>
+        <rect x="227" y="20" width="46" height="28" rx="3" fill="rgba(0,237,231,.18)"/>
+        <circle cx="243" cy="30" r="6" fill="rgba(0,237,231,.25)"/>
+        <line x1="252" y1="32" x2="268" y2="32" stroke="rgba(0,237,231,.25)" stroke-width="1"/>
+        <line x1="252" y1="37" x2="268" y2="37" stroke="rgba(0,237,231,.18)" stroke-width="1"/>
+        <text x="250" y="56" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="#00EDE7" text-anchor="middle">Option B ✓</text>
+        <rect x="290" y="14" width="44" height="50" rx="6" fill="rgba(0,237,231,.07)" stroke="#00EDE7" stroke-opacity=".2" stroke-width="1"/>
+        <rect x="296" y="20" width="32" height="28" rx="3" fill="rgba(0,237,231,.08)"/>
+        <line x1="296" y1="28" x2="328" y2="28" stroke="rgba(0,237,231,.15)" stroke-width="1"/>
+        <line x1="296" y1="34" x2="322" y2="34" stroke="rgba(0,237,231,.12)" stroke-width="1"/>
+        <line x1="296" y1="40" x2="325" y2="40" stroke="rgba(0,237,231,.1)" stroke-width="1"/>
+        <text x="312" y="56" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(0,237,231,.45)" text-anchor="middle">Option C</text>
+        <text x="220" y="78" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(0,237,231,.4)" text-anchor="middle">AI SIDEBAR CANVAS</text>
+        <rect x="150" y="100" width="184" height="36" rx="7" fill="rgba(0,237,231,.06)" stroke="#00EDE7" stroke-opacity=".18" stroke-width="1"/>
+        <text x="242" y="115" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(0,237,231,.6)" text-anchor="middle">Human: select → drag elements</text>
+        <text x="242" y="127" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(0,237,231,.4)" text-anchor="middle">AI: refine selected direction</text>
+        <text x="63" y="155" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(232,240,255,.2)" text-anchor="middle">describe → select → refine</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- PROPOSAL 03 -->
+  <div class="prop-row r" style="margin-bottom:20px;transition-delay:.1s">
+    <div class="prop-left p3">
+      <div class="proposal-num">Proposal 03 · Innovation Tools</div>
+      <div class="proposal-title">Invisible Reporting</div>
+      <div class="proposal-insight">Core friction: status reporting is largely performative — a summary of information all stakeholders already have, formatted for communication rather than decision-making.</div>
+      <div class="proposal-body">Progress surfaces automatically from actual work artifacts: document edits, meeting updates, task completions. A real-time dashboard updates as work happens, without manual reporting cycles. The interaction model shifts from "write what you did" to "review what was captured."</div>
+      <div class="proposal-metric"><span>North Star Metric</span>Reduction in time spent on status reporting per contributor per week</div>
+    </div>
+    <div class="prop-right">
+      <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+        <defs>
+          <linearGradient id="g3a" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#6096FC" stop-opacity=".8"/>
+            <stop offset="100%" stop-color="#6096FC" stop-opacity=".2"/>
+          </linearGradient>
+          <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#6096FC" opacity=".5"/>
+          </marker>
+        </defs>
+        <rect x="8" y="14" width="96" height="22" rx="5" fill="rgba(96,150,252,.09)" stroke="#6096FC" stroke-opacity=".22" stroke-width="1"/>
+        <text x="14" y="29" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(96,150,252,.75)">Doc updated (Sarah)</text>
+        <rect x="8" y="44" width="96" height="22" rx="5" fill="rgba(96,150,252,.09)" stroke="#6096FC" stroke-opacity=".22" stroke-width="1"/>
+        <text x="14" y="59" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(96,150,252,.75)">Task marked done</text>
+        <rect x="8" y="74" width="96" height="22" rx="5" fill="rgba(96,150,252,.09)" stroke="#6096FC" stroke-opacity=".22" stroke-width="1"/>
+        <text x="14" y="89" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(96,150,252,.75)">Meeting: shipped v2</text>
+        <line x1="106" y1="25" x2="148" y2="75" stroke="#6096FC" stroke-opacity=".25" stroke-width="1" marker-end="url(#arr3)"/>
+        <line x1="106" y1="55" x2="148" y2="75" stroke="#6096FC" stroke-opacity=".25" stroke-width="1"/>
+        <line x1="106" y1="85" x2="148" y2="77" stroke="#6096FC" stroke-opacity=".25" stroke-width="1"/>
+        <circle cx="158" cy="75" r="10" fill="rgba(96,150,252,.15)" stroke="#6096FC" stroke-opacity=".4" stroke-width="1.5"/>
+        <text x="158" y="79" font-family="IBM Plex Mono,monospace" font-size="8" fill="#6096FC" text-anchor="middle">AI</text>
+        <line x1="168" y1="75" x2="184" y2="75" stroke="#6096FC" stroke-opacity=".45" stroke-width="1.5" marker-end="url(#arr3)"/>
+        <rect x="186" y="16" width="146" height="122" rx="10" fill="rgba(96,150,252,.06)" stroke="#6096FC" stroke-opacity=".22" stroke-width="1"/>
+        <rect x="186" y="16" width="146" height="2" rx="1" fill="url(#g3a)"/>
+        <text x="259" y="30" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(96,150,252,.55)" text-anchor="middle">AUTO-GENERATED DASHBOARD</text>
+        <text x="198" y="46" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(232,240,255,.5)">Design Sprint</text>
+        <rect x="198" y="50" width="120" height="7" rx="3" fill="rgba(96,150,252,.1)"/>
+        <rect x="198" y="50" width="84" height="7" rx="3" fill="rgba(96,150,252,.55)"/>
+        <text x="324" y="57" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="#6096FC">70%</text>
+        <text x="198" y="70" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(232,240,255,.5)">Q2 Roadmap</text>
+        <rect x="198" y="74" width="120" height="7" rx="3" fill="rgba(96,150,252,.1)"/>
+        <rect x="198" y="74" width="100" height="7" rx="3" fill="rgba(0,237,231,.4)"/>
+        <text x="324" y="81" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="#00EDE7">83%</text>
+        <text x="198" y="94" font-family="IBM Plex Mono,monospace" font-size="7.5" fill="rgba(232,240,255,.5)">User Research</text>
+        <rect x="198" y="98" width="120" height="7" rx="3" fill="rgba(96,150,252,.1)"/>
+        <rect x="198" y="98" width="48" height="7" rx="3" fill="rgba(96,150,252,.35)"/>
+        <text x="324" y="105" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="#6096FC">40%</text>
+        <rect x="198" y="114" width="122" height="16" rx="4" fill="rgba(245,158,11,.08)" stroke="rgba(245,158,11,.25)" stroke-width="1"/>
+        <text x="202" y="125" font-family="IBM Plex Mono,monospace" font-size="6" fill="#fbbf24">⚠ Risk: deadline conflict</text>
+        <text x="8" y="120" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(232,240,255,.18)">Auto-reporting enabled</text>
+        
+      </svg>
+    </div>
+  </div>
+
+  <!-- PROPOSAL 04 -->
+  <div class="prop-row r2" style="transition-delay:.2s">
+    <div class="prop-left p4">
+      <div class="proposal-num">Proposal 04 · AI-Native Context Layer</div>
+      <div class="proposal-title">Persistent AI as Organizational Memory</div>
+      <div class="proposal-insight">Core friction: enterprise AI tools operate session-by-session. Organizational knowledge — decisions made, rationale discussed, commitments given — is not retained or surfaced when relevant.</div>
+      <div class="proposal-body">Rather than treating AI as a feature within documents or meetings, position Zoom Workplace as the persistent context layer for an organization's work. AI that retains every meeting, every document edit, every commitment — and surfaces the right history at the right moment. The competitive differentiator is not capability, but memory. This is where Zoom's conversation data advantage becomes structurally defensible.</div>
+      <div class="proposal-metric"><span>North Star Metric</span>% of decision contexts where AI-surfaced prior meeting history was referenced before action was taken</div>
+    </div>
+    <div class="prop-right">
+      <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+        <defs>
+          <linearGradient id="g4a" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity=".6"/>
+            <stop offset="100%" stop-color="#a78bfa" stop-opacity=".15"/>
+          </linearGradient>
+          <linearGradient id="g4b" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#a78bfa" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#a78bfa" stop-opacity=".04"/>
+          </linearGradient>
+          <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#a78bfa" opacity=".5"/>
+          </marker>
+        </defs>
+        <line x1="20" y1="145" x2="190" y2="145" stroke="rgba(167,139,250,.2)" stroke-width="1.5"/>
+        <circle cx="40" cy="145" r="6" fill="rgba(167,139,250,.2)" stroke="#a78bfa" stroke-opacity=".4" stroke-width="1.5"/>
+        <text x="40" y="160" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(167,139,250,.5)" text-anchor="middle">Jan 6</text>
+        <rect x="20" y="102" width="40" height="36" rx="5" fill="url(#g4b)" stroke="#a78bfa" stroke-opacity=".2" stroke-width="1"/>
+        <text x="40" y="116" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(167,139,250,.6)" text-anchor="middle">Strategy</text>
+        <text x="40" y="126" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(167,139,250,.4)" text-anchor="middle">kickoff</text>
+        <text x="40" y="136" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(167,139,250,.3)" text-anchor="middle">decision: A</text>
+        <line x1="40" y1="138" x2="40" y2="142" stroke="rgba(167,139,250,.3)" stroke-width="1"/>
+        <circle cx="95" cy="145" r="6" fill="rgba(167,139,250,.2)" stroke="#a78bfa" stroke-opacity=".4" stroke-width="1.5"/>
+        <text x="95" y="160" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(167,139,250,.5)" text-anchor="middle">Feb 12</text>
+        <rect x="75" y="90" width="40" height="48" rx="5" fill="url(#g4b)" stroke="#a78bfa" stroke-opacity=".2" stroke-width="1"/>
+        <text x="95" y="104" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(167,139,250,.6)" text-anchor="middle">Design</text>
+        <text x="95" y="114" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(167,139,250,.4)" text-anchor="middle">review</text>
+        <text x="95" y="124" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(167,139,250,.3)" text-anchor="middle">pivot: B→C</text>
+        <text x="95" y="133" font-family="IBM Plex Mono,monospace" font-size="5.8" fill="rgba(167,139,250,.25)" text-anchor="middle">risk</text>
+        <line x1="95" y1="138" x2="95" y2="142" stroke="rgba(167,139,250,.3)" stroke-width="1"/>
+        <circle cx="158" cy="145" r="6" fill="rgba(167,139,250,.3)" stroke="#a78bfa" stroke-opacity=".6" stroke-width="1.5"/>
+        <text x="158" y="160" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(167,139,250,.6)" text-anchor="middle">Today</text>
+        <line x1="158" y1="110" x2="158" y2="142" stroke="rgba(167,139,250,.3)" stroke-width="1"/>
+        <path d="M40,100 Q100,50 200,75" stroke="#a78bfa" stroke-opacity=".25" stroke-width="1.5" fill="none"/>
+        <path d="M95,88 Q140,52 200,72" stroke="#a78bfa" stroke-opacity=".2" stroke-width="1.5" fill="none"/>
+        <line x1="158" y1="108" x2="199" y2="80" stroke="#a78bfa" stroke-opacity=".3" stroke-width="1.5" marker-end="url(#arr4)"/>
+        <rect x="200" y="30" width="132" height="108" rx="10" fill="url(#g4b)" stroke="#a78bfa" stroke-opacity=".3" stroke-width="1.5"/>
+        <rect x="200" y="30" width="132" height="2" rx="1" fill="url(#g4a)"/>
+        <text x="266" y="48" font-family="IBM Plex Mono,monospace" font-size="7" fill="rgba(167,139,250,.7)" text-anchor="middle">PERSISTENT CONTEXT</text>
+        <rect x="212" y="55" width="108" height="12" rx="3" fill="rgba(167,139,250,.1)"/>
+        <text x="218" y="64" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(167,139,250,.65)">Jan 6: chose option A</text>
+        <rect x="212" y="72" width="108" height="12" rx="3" fill="rgba(167,139,250,.1)"/>
+        <text x="218" y="81" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(167,139,250,.65)">Feb 12: pivot B→C</text>
+        <rect x="212" y="89" width="108" height="12" rx="3" fill="rgba(167,139,250,.15)" stroke="#a78bfa" stroke-opacity=".3" stroke-width="1"/>
+        <text x="218" y="98" font-family="IBM Plex Mono,monospace" font-size="6" fill="#a78bfa">↳ relevant now</text>
+        <rect x="212" y="110" width="108" height="20" rx="4" fill="rgba(167,139,250,.08)" stroke="#a78bfa" stroke-opacity=".25" stroke-width="1"/>
+        <text x="266" y="122" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(167,139,250,.55)" text-anchor="middle">Surface context in flow</text>
+        <text x="266" y="155" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(232,240,255,.15)" text-anchor="middle">memory · not just capability</text>
+      </svg>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;padding:14px 18px;background:rgba(45,140,255,.03);border:1px solid var(--db);border-radius:var(--r);font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dt4);letter-spacing:.04em" class="r">
+    ↳ The above reflects external-observer analysis. Internal data, technical constraints, and existing research would significantly shape how any of these directions are prioritized or scoped.
+  </div>
+</div>
+</section>
+
+<!-- FIT MATRIX -->
+<section id="fit" class="sec-dk3">
+<div class="max">
+  <div class="lbl-dk r">03 · Fit Assessment</div>
+  <div class="two-col r2" style="margin-bottom:40px">
+    <div>
+      <div class="sec-title">Capabilities across three role directions</div>
+    </div>
+    <div>
+      <p style="color:var(--dt2);font-size:14px;line-height:1.75">The following maps my background against the core requirements across the product, design, and innovation directions. Each entry is supported by specific evidence.</p>
+    </div>
+  </div>
+
+  <div class="r3" style="overflow-x:auto">
+    <table class="fit-table">
+      <thead>
+        <tr>
+          <th style="min-width:200px">Capability Dimension</th>
+          <th style="min-width:110px">PM · Docs</th>
+          <th style="min-width:130px">Designer · Meeting</th>
+          <th style="min-width:130px">Expert · Innovation</th>
+          <th style="min-width:240px">Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI product shipping experience</td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td><span class="pip pip-m">Medium</span></td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td style="font-size:12px">Gemini 6-node workflow (Yilv); WeChat mini-app 4,600+ users; OpenClaw multi-agent architecture</td>
+        </tr>
+        <tr>
+          <td>Conversation data processing (transcripts, summaries)</td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td><span class="pip pip-m">Medium</span></td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td style="font-size:12px">LLM processing of 10+ English Focus Group recordings; multilingual semantic clustering; structured output generation</td>
+        </tr>
+        <tr>
+          <td>User research & qualitative insight extraction</td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td style="font-size:12px">LSE ethnographic methodology (Distinction); 300+ deep interviews; 6 user archetypes from 10+ Focus Groups</td>
+        </tr>
+        <tr>
+          <td>English communication (written & spoken)</td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td><span class="pip pip-s">Strong</span></td>
+          <td style="font-size:12px">LSE MSc (English, Distinction); OSU BSBA (English); 10+ years cross-cultural professional communication</td>
+        </tr>
+        <tr>
+          <td>Enterprise systems & stakeholder coordination</td>
+          <td><span class="pip pip-m">Medium</span></td>
+          <td><span class="pip pip-m">Medium</span></td>
+          <td><span class="pip pip-m">Medium</span></td>
+          <td style="font-size:12px">Deloitte PMO: 23 BUs, 40+ stakeholders, large-scale ERP migration. Full-stack development gives technical alignment capability.</td>
+        </tr>
+        <tr>
+          <td>Interaction design & visual design execution</td>
+          <td><span class="pip pip-b">Building</span></td>
+          <td><span class="pip pip-b">Building</span></td>
+          <td><span class="pip pip-b">Building</span></td>
+          <td style="font-size:12px">Product design judgment from full-cycle PM work; UI design for own applications. No professional design portfolio at SaaS scale.</td>
+        </tr>
+        <tr>
+          <td>Enterprise SaaS PM at scale / team management</td>
+          <td><span class="pip pip-b">Building</span></td>
+          <td><span class="pip pip-b">Building</span></td>
+          <td><span class="pip pip-b">Building</span></td>
+          <td style="font-size:12px">No direct SaaS PM role at scale or formal team management. Deloitte PMO and independent 0→1 delivery provide adjacent foundations.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--dt4);font-family:'IBM Plex Mono',monospace;margin-top:8px">* Strong = direct evidence; Medium = transferable with ramp-up; Building = acknowledged gap.</p>
+
+  <div class="honest-note r" style="transition-delay:.2s">
+    <strong>A note on experience level</strong>
+    My background does not include a decade of Enterprise SaaS product management, professional design practice at scale, or formal team management. Enterprise collaboration tools frequently fail not due to technical limitations, but because product decisions are made against assumed behavioral models rather than observed ones. My training in ethnographic research provides a systematic method for identifying that gap. If the primary requirement is an operator with an established SaaS or design scale background, I am not the strongest candidate for roles where that depth is the primary requirement. If the requirement includes demonstrated AI product execution, rigorous qualitative research methodology, and direct experience with the conversation-to-structured-output problem  — those I can evidence.
+  </div>
+</div>
+</section>
+
+<!-- RELEVANT WORK -->
+<section id="work" class="sec-dk">
+<div class="max">
+  <div class="lbl-dk r">04 · Relevant Work</div>
+  <div class="sec-sub r2">Selected projects with direct relevance to Zoom Workplace's core product challenges.</div>
+
+  <div class="proof-grid r3">
+    <div class="proof-card">
+      <div class="proof-tag">Yilv Cultural Travel · 2025–Present</div>
+      <div class="proof-title">AI Workflow: Conversation → Structured Document</div>
+      <div class="proof-body">Designed and deployed a 6-node Gemini workflow to convert supplier interviews and research conversations into production-ready product SOPs. Architecture handles source selection, hallucination suppression, structured extraction, and formatted output. Product research cycle: 5-7 days → 30 minutes. 15 products shipped, ¥4M+ revenue.</div>
+      <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Conversation → Document</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Hallucination Suppression</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">LLM Workflow Architecture</span>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-tag">Trailblazer China · 2024–Present</div>
+      <div class="proof-title">Multilingual Qualitative Data → Structured GTM Output</div>
+      <div class="proof-body">Conducted 10+ English-language Focus Groups with European and North American participants. Processed multilingual recordings via LLM pipeline  — semantic clustering, insight extraction  — producing 6 user need archetypes and 5 primary pain points. Final output: a structured GTM strategy document covering channel strategy, persona-driven messaging, and conversion logic.</div>
+      <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Multilingual Processing</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Semantic Clustering</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Qualitative → Structured Output</span>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-tag">Independent · 2025–Present</div>
+      <div class="proof-title">"Ming Li You Xi"  — 0→1 AI Product, Full Development Lifecycle</div>
+      <div class="proof-body">Independently managed the complete development lifecycle of a WeChat mini-application: requirements, UI/UX, front-end and back-end development, LLM integration, deployment. Prompt architecture incorporates anthropological frameworks. 4,600+ registered users. Demonstrates end-to-end product ownership and hands-on technical capability in AI product development.</div>
+      <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Full-Cycle Development</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">4,600+ Users</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent3);background:var(--accent-bg);border:1px solid var(--db2);padding:3px 9px;border-radius:4px">Prompt Architecture</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Experience -->
+  <div class="exp-grid" style="margin-top:20px">
+    <div class="exp-card r">
+      <div>
+        <div class="exp-meta">2025.09  — PRESENT · HANGZHOU, CHINA</div>
+        <div class="exp-title">Product Manager  — Yilv Culture · Global Grand Tour</div>
+        <div class="exp-sub">AI-Powered 0→1 Product · Full Lifecycle · GTM Strategy</div>
+        <div class="exp-body">Led 0→1 development of 15 high-end overseas study tour products. Built AI-powered workflow (Gemini, 6 nodes) to compress product research cycles. Responsible for full product lifecycle: market research, design, supply chain, marketing, customer experience, and retrospective. Applied JTBD and Demand Space frameworks to reverse-engineer GTM strategy from user decision paths.</div>
+      </div>
+      <div class="exp-nums">
+        <div><div class="exp-num-val">15</div><div class="exp-num-lbl">products shipped</div></div>
+        <div><div class="exp-num-val">80%</div><div class="exp-num-lbl">group fill rate</div></div>
+      </div>
+    </div>
+    <div class="exp-card r2">
+      <div>
+        <div class="exp-meta">2022–2024 · HANGZHOU, CHINA</div>
+        <div class="exp-title">Project Manager — MSC Consulting · Xiang Xing She (Rural Revitalization NGO)</div>
+        <div class="exp-sub">Immersive Fieldwork · Qualitative Research · MVP Validation</div>
+        <div class="exp-body">Led cross-regional immersive fieldwork projects across 10+ ethnic minority villages in 4 provinces. Conducted 300+ deep interviews and oral history sessions. Incubated and validated a rural experiential product concept (40+ seed users). Orchestrated a 200-person cross-cultural participatory event.</div>
+      </div>
+      <div class="exp-nums">
+        <div><div class="exp-num-val">300+</div><div class="exp-num-lbl">interviews</div></div>
+        <div><div class="exp-num-val">40+</div><div class="exp-num-lbl">seed users</div></div>
+      </div>
+    </div>
+    <div class="exp-card r3">
+      <div>
+        <div class="exp-meta">2018 INTERN · 2019–2020 FULL-TIME · CHICAGO, USA</div>
+        <div class="exp-title">Business Technology Analyst — Deloitte</div>
+        <div class="exp-sub">Technology Consulting · Enterprise Systems · PMO</div>
+        <div class="exp-body">Led PMO for a large-scale ERP system upgrade at a major energy company — the kind of multi-stakeholder enterprise environment that B2B SaaS products are built to serve. Coordinated 23 business units and 40+ team members without direct authority. Audited and resolved 200K+ data conversion errors. Produced a ground-level understanding of how large organizations evaluate, resist, and ultimately adopt new technology.</div>
+      </div>
+      <div class="exp-nums">
+        <div><div class="exp-num-val">23</div><div class="exp-num-lbl">BUs coordinated</div></div>
+        <div><div class="exp-num-val">200K+</div><div class="exp-num-lbl">errors resolved</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Education row -->
+  <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px" class="r">
+    <div class="exp-card" style="padding:22px 26px">
+      <div>
+        <div class="exp-meta">2021–2022 · LONDON, UK</div>
+        <div class="exp-title">MSc Social Anthropology — London School of Economics</div>
+        <div class="exp-sub" style="color:var(--teal)">Distinction · Highest Classification</div>
+        <div class="exp-body" style="margin-top:8px;font-size:12.5px">Thesis: Taoist ethics and free will through yin-yang balance. Trained in ethnographic methodology and deep-structure cultural analysis. These methods directly underpin my approach to user research and product discovery.</div>
+      </div>
+      <div class="exp-nums"><div><div class="exp-num-val" style="font-size:1.3rem">LSE</div><div class="exp-num-lbl">London</div></div></div>
+    </div>
+    <div class="exp-card" style="padding:22px 26px">
+      <div>
+        <div class="exp-meta">2015–2019 · COLUMBUS, USA</div>
+        <div class="exp-title">BSBA Finance, Minor Nonprofit Management — Ohio State University</div>
+        <div class="exp-sub" style="color:var(--teal)">GPA 3.86 · Pace Setter Award (Top 1%, Fisher College of Business)</div>
+        <div class="exp-body" style="margin-top:8px;font-size:12.5px">The Pace Setter Award is OSU Fisher's highest honor, recognizing the top 1% of students across academic achievement, leadership, and community contribution.</div>
+      </div>
+      <div class="exp-nums"><div><div class="exp-num-val" style="font-size:1.3rem">OSU</div><div class="exp-num-lbl">Columbus</div></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- WHAT I BRING -->
+<section id="value" class="sec-lt">
+<div class="max">
+  <div class="lbl-lt r">05 · What I Bring</div>
+  <div class="two-col r2" style="margin-bottom:44px">
+    <div>
+      <div class="sec-title-lt">Three capabilities directly applicable to this work</div>
+    </div>
+    <div>
+      <p style="color:var(--lt2);font-size:14px;line-height:1.75">The following is not a plan. It is an assessment of specific capabilities I can contribute from day one, based on existing track record.</p>
+    </div>
+  </div>
+  <div class="cap-grid">
+    <div class="cap-card r">
+      <div class="cap-num">01</div>
+      <div class="cap-label">Capability 01</div>
+      <div class="cap-title">Ethnographic Decoding of User Behavior</div>
+      <div class="cap-body">Enterprise collaboration tools frequently fail at adoption due to misalignment between assumed and actual user behavior. My ethnographic research training provides a systematic framework for identifying latent friction points that analytics do not surface  — the gap between what users report and what they do. Applied to Zoom Workplace, this means diagnosing the real failure modes in human-AI collaboration flows before they manifest as retention or adoption problems.</div>
+      <div class="cap-tags">
+        <span class="cap-tag">Ethnographic Methods</span>
+        <span class="cap-tag">Behavioral Gap Analysis</span>
+        <span class="cap-tag">Qualitative Signal Extraction</span>
+      </div>
+    </div>
+    <div class="cap-card r2">
+      <div class="cap-num">02</div>
+      <div class="cap-label">Capability 02</div>
+      <div class="cap-title">Demonstrated AI Workflow Execution</div>
+      <div class="cap-body">The core technical challenge of Zoom Docs  — transforming unstructured conversational data into structured, actionable documents  — is a problem I have already built production solutions against. Using LLM-based workflows of my own design, I have processed multilingual qualitative recordings and produced structured strategic outputs at significantly compressed timelines. The design patterns, failure modes, and architectural constraints I have encountered are directly applicable.</div>
+      <div class="cap-tags">
+        <span class="cap-tag">LLM Workflow Architecture</span>
+        <span class="cap-tag">Unstructured → Structured</span>
+        <span class="cap-tag">AI Product Execution</span>
+      </div>
+    </div>
+    <div class="cap-card r3">
+      <div class="cap-num">03</div>
+      <div class="cap-label">Capability 03</div>
+      <div class="cap-title">Enterprise Adoption Intelligence</div>
+      <div class="cap-body">AI features in enterprise contexts succeed or fail based on whether organizations are willing to trust and operationalize them  — driven by governance clarity, data security, and output credibility. At Deloitte, I worked directly inside large-scale organizational change: coordinating 23 business units through a technology migration they did not initiate. That experience produced an operational understanding of how enterprise stakeholders actually evaluate new tools  — which directly informs how product decisions should be framed for adoption, not just capability.</div>
+      <div class="cap-tags">
+        <span class="cap-tag">Enterprise Change Management</span>
+        <span class="cap-tag">AI Trust & Governance</span>
+        <span class="cap-tag">Stakeholder Credibility</span>
+      </div>
+    </div>
+  </div>
+  <div class="closing-q r" style="transition-delay:.3s">
+    <div class="closing-q-label">A question I would prioritize early</div>
+    <div class="closing-q-text">At which specific point in the meeting-to-document conversion flow do enterprise users most frequently disengage from AI-generated output  — and is that moment currently instrumented?</div>
+  </div>
+</div>
+</section>
+
+<!-- CLOSE -->
+<section id="close">
+<div class="close-inner">
+  <div class="lbl-dk r">06 · Contact</div>
+  <div class="close-name r2">Yaqi Li <span style="background:linear-gradient(135deg,var(--accent2),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">李亚淇</span></div>
+  <p style="font-size:14px;color:var(--dt3);margin-bottom:8px;letter-spacing:.04em">Product Manager · Anthropologist · AI Practitioner · Hangzhou, China</p>
+
+  <div class="r" style="transition-delay:.05s;max-width:640px;margin:24px 0">
+    <p style="font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--dt2);line-height:1.8;padding-left:18px;border-left:2px solid var(--accent)">
+      The meeting-to-document conversion problem is not yet solved. The anthropological and AI workflow background I bring is most directly applicable where that problem is hardest  — in the human behavior layer, not the technical one. I would welcome the opportunity to discuss further.
+    </p>
+  </div>
+
+  <div class="contact-grid r" style="transition-delay:.1s">
+    <a class="contact-item" href="tel:15537279556"><span class="contact-dot"></span>+86 155 3727 9556</a>
+    <a class="contact-item" href="mailto:liyaqi1995@126.com"><span class="contact-dot"></span>liyaqi1995@126.com</a>
+    <div class="contact-item"><span class="contact-dot"></span>LSE · Social Anthropology · Distinction</div>
+    <div class="contact-item"><span class="contact-dot"></span>OSU · Fisher College · GPA 3.86 · Pace Setter</div>
+  </div>
+  <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--db)">
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dt4);letter-spacing:.08em">Prepared for Zoom Communications Inc. · Hangzhou · April 2026</p>
+  </div>
+</div>
+</section>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  document.getElementById('prog').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%';
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+},{threshold:0.06});
+document.querySelectorAll('.r,.r2,.r3').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
